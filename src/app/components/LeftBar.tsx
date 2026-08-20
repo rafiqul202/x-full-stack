@@ -1,6 +1,8 @@
 import Link from "next/link";
 import React from "react";
 import ImageKit from "./ImageKit";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import SignOut from "./SignOut";
 
 const menuLists = [
   {
@@ -64,7 +66,9 @@ const menuLists = [
     icon: "more.svg",
   },
 ];
-const LeftBar = () => {
+const LeftBar = async () => {
+  const user = await currentUser()
+  console.log(user?.imageUrl);
   return (
     <div className="h-screen sticky top-0 flex flex-col justify-between pt-2 pb-8">
       {/* logo menu button */}
@@ -116,7 +120,7 @@ const LeftBar = () => {
           {/* image */}
           <div className="w-10 h-10 relative rounded-full overflow-hidden">
             <ImageKit
-              path={"/general/general/avatar.png"}
+              path={user?.imageUrl}
               alt="Avatar"
               h={45}
               w={45}
@@ -125,15 +129,15 @@ const LeftBar = () => {
           </div>
           {/* text */}
           <div className="hidden xxl:flex flex-col">
-            <span className="text-sm">Rafiqul Hasan</span>
+            <span className="text-sm">
+              {user?.firstName} {user?.lastName}
+            </span>
             <span className="text-xs text-gray-400">
-              rafiqulhasan398@gmail.com
+              {user?.emailAddresses[0].emailAddress}
             </span>
           </div>
         </div>
-        <div className="hidden xxl:block cursor-pointer font-bold text-white">
-          ...
-        </div>
+       <SignOut/>
       </div>
     </div>
   );

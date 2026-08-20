@@ -10,7 +10,7 @@ const Post = async ({ type }: { type?: "status" | "comment" }) => {
   const fileDetails = await getFileDetails("6a806da05c7cd75eb8d00039");
   // console.log(fileDetails);
   return (
-    <div className="p-4 border-y-[1px] border-borderGray">
+    <div className="p-4 border-y-[1px] border-borderGray -z-10">
       {/* Post type */}
       <div className="flex items-center gap-2 text-sm text-textGray mb-2 ">
         <svg
@@ -34,7 +34,7 @@ const Post = async ({ type }: { type?: "status" | "comment" }) => {
           className={`${
             type === "status"
               ? "hidden"
-              : "relative w-10 h-10 rounded-full overflow-hidden"
+              : "relative w-10 h-10 rounded-full overflow-hidden -z-10"
           }`}
         >
           <ImageKit
@@ -91,9 +91,7 @@ const Post = async ({ type }: { type?: "status" | "comment" }) => {
                   alt="post"
                   w={fileDetails.width}
                   h={fileDetails.height}
-                  className={
-                    fileDetails?.customMetadata?.sensitive ? "blur-lg" : ""
-                  }
+                  className={`${fileDetails?.customMetadata?.sensitive ? "blur-lg " : ""}`}
                 />
               ) : (
                 <VideoKit

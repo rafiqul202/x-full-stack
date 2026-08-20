@@ -1,8 +1,10 @@
 import Link from "next/link";
-import Feed from "./components/Feed";
-import Share from "./components/Share";
+import Feed from "../components/Feed";
+import Share from "../components/Share";
 
-const Homepage = () => {
+
+const Homepage =  () => {
+
   return (
     <div className="">
       <div className="flex justify-between text-textGray font-bold border-b-[1px] border-borderGray px-4 pt-4">
