@@ -11,6 +11,7 @@ import {
 import Image from "next/image";
 import ImageEditor from "./ImageEditor";
 
+
 const Share = () => {
   const [media, setMedia] = useState<File | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);

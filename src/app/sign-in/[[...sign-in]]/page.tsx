@@ -21,7 +21,19 @@ const SignInPage = () => {
           Happening now
         </h1>
         <h1 className="text-2xl ">Join today.</h1>
-        <SignIn/>
+        <SignIn />
+        {/* OR SIGN UP */}
+        <div className="w-72 flex items-center gap-4 xxl:ml-12 ">
+          <div className="h-px bg-borderGray flex-grow"></div>
+          <span className="text-textGrayLight">or</span>
+          <div className="h-px bg-borderGray flex-grow"></div>
+        </div>
+        <p className="w-72 text-xs">
+          By signing up, you agree to the{" "}
+          <span className="text-iconBlue">Terms of Service</span> and{" "}
+          <span className="text-iconBlue">Privacy Policy</span>, including{" "}
+          <span className="text-iconBlue">Cookie Use</span>.
+        </p>
       </div>
     </div>
   );

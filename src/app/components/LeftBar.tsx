@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import ImageKit from "./ImageKit";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import {  currentUser } from "@clerk/nextjs/server";
 import SignOut from "./SignOut";
 
 const menuLists = [
@@ -68,7 +68,7 @@ const menuLists = [
 ];
 const LeftBar = async () => {
   const user = await currentUser()
-  console.log(user?.imageUrl);
+  
   return (
     <div className="h-screen sticky top-0 flex flex-col justify-between pt-2 pb-8">
       {/* logo menu button */}

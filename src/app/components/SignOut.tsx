@@ -9,7 +9,7 @@ const SignOut = () => {
   const { signOut } = useClerk();
 
   return (
-    <div className="hidden xxl:block relative">
+    <div className="hidden xxl:block relative z-50">
       <div
         className="cursor-pointer font-bold text-white"
         onClick={() => setOpen((prev) => !prev)}
