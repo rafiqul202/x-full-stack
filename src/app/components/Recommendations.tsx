@@ -22,7 +22,7 @@ const Recommendations = async () => {
     take: 4,
     select: { id: true, displayName: true, img: true, username: true },
   });
-  console.log("recommendations following data", friendRecommendations);
+  // console.log("recommendations following data", friendRecommendations);
   return (
     <div className="p-4 rounded-2xl border-[1px] border-borderGray flex flex-col gap-4">
       {/* Image user card */}
