@@ -1,7 +1,10 @@
-import React from "react";
+"use client";
+import { useUser } from "@clerk/nextjs";
 import ImageKit from "./ImageKit";
 import Post from "./Post";
 import { Post as PostType } from "@prisma/client";
+import { useActionState } from "react";
+import { addComment } from "@/action";
 
 type CommentWithDetails = PostType & {
   user: { displayName: string | null; username: string; img: string | null };
@@ -11,39 +14,60 @@ type CommentWithDetails = PostType & {
   saves: { id: number }[];
 };
 
-const Comments = ({ comments, postId, username }: {
-  comments: CommentWithDetails[],
+const Comments = ({
+  comments,
+  postId,
+  username,
+}: {
+  comments: CommentWithDetails[];
   postId: number;
   username: string;
 }) => {
+  const { isLoaded, isSignedIn, user } = useUser();
+
+const [state,formAction,isPending] = useActionState(addComment,{success:false,error:false})
+
   return (
     <div>
-      <form className="flex items-center justify-between gap-4 p-4 ">
+      <form className="flex items-center justify-between gap-4 p-4 " action={formAction}>
         <div className="relative w-9 h-9 rounded-full overflow-hidden">
           <ImageKit
-            path="/general/general/avatar.png"
+            path={user?.imageUrl ?? "/general/general/avatar.png"}
             alt="avatar"
             w={100}
             h={100}
           />
         </div>
         <input
+          type="number"
+          name="postId"
+          hidden
+          readOnly
+          value={postId}
+        />
+        <input
+          type="string"
+          name="username"
+          hidden
+          readOnly
+          value={username}
+        />
+        <input
           type="text"
+          name="desc"
           className="flex-1 bg-transparent outline-none p-2 text-xl"
           placeholder="Post your reply"
         />
-        <button className="py-2 px-4 font-bold bg-white text-black rounded-full">
-          Reply
+        <button disabled={isPending} className="py-2 px-4 font-bold bg-white text-black rounded-full disabled:cursor-not-allowed disabled:bg-opacity-45">
+          {isPending? "Replying" : "Reply"}
         </button>
       </form>
-      {
-        comments?.map((comment) => (
-          <div key={comment.id}>
-            <Post type="comment" post={comment} />
-
-          </div>
-        ))
-      }
+      {state.error && <span className="text-red-500 p-4">Something want Wrong!</span>}
+      {comments?.map((comment) => (
+        <div key={comment.id}>
+          <Post type="comment" post={comment} />
+        </div>
+      ))}
     </div>
   );
 };

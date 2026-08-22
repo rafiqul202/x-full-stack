@@ -10,9 +10,10 @@ import {
 } from "@imagekit/next";
 import Image from "next/image";
 import ImageEditor from "./ImageEditor";
-
+import { useUser } from "@clerk/nextjs";
 
 const Share = () => {
+  const { user, isLoaded, isSignedIn } = useUser();
   const [media, setMedia] = useState<File | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [setting, setSetting] = useState<{
@@ -108,7 +109,6 @@ const Share = () => {
         },
         // Abort signal to allow cancellation of the upload if needed.
         abortSignal: abortController.signal,
-       
       });
       console.log("Upload response:", uploadResponse);
     } catch (error) {
@@ -133,7 +133,7 @@ const Share = () => {
       {/* avatar */}
       <div className="rounded-full w-10 h-10 overflow-hidden">
         <ImageKit
-          path="general/general/avatar.png"
+          path={user?.imageUrl ?? "general/general/avatar.png"}
           alt="avatar"
           h={40}
           w={40}
@@ -162,7 +162,10 @@ const Share = () => {
             >
               Edit
             </div>
-            <div className="absolute top-2  right-2 bg-black bg-opacity-50 text-white h-8 w-8 rounded-full cursor-pointer font-bold text-md flex items-center justify-center" onClick={()=> setMedia(null)}>
+            <div
+              className="absolute top-2  right-2 bg-black bg-opacity-50 text-white h-8 w-8 rounded-full cursor-pointer font-bold text-md flex items-center justify-center"
+              onClick={() => setMedia(null)}
+            >
               X
             </div>
           </div>
@@ -170,7 +173,10 @@ const Share = () => {
         {media?.type.includes("video") && previewUrl && (
           <div className="relative">
             <video src={previewUrl} controls />
-            <div className="absolute top-2  right-2 bg-black bg-opacity-50 text-white h-8 w-8 rounded-full cursor-pointer font-bold text-md flex justify-center items-center " onClick={()=> setMedia(null)}>
+            <div
+              className="absolute top-2  right-2 bg-black bg-opacity-50 text-white h-8 w-8 rounded-full cursor-pointer font-bold text-md flex justify-center items-center "
+              onClick={() => setMedia(null)}
+            >
               X
             </div>
           </div>
