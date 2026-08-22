@@ -117,42 +117,42 @@ const Post = ({
           <Link
             href={`/${originalPost?.user?.username}/status/${originalPost?.id}`}
           >
-            <div className="">
-              <p className={`mb-3${type === "status" && "text-lg"}`}>
-                {post?.desc}
-              </p>
-              {originalPost?.img && (
-                <div className="overflow-hidden">
-                  <ImageKit
-                    path={originalPost?.img}
-                    alt="Image"
-                    h={600}
-                    w={600}
-                    className={originalPost?.isSensitive ? "blur-3xl" : ""}
-                  />
-                </div>
-              )}
-              {originalPost?.video && (
-                <div className="rounded-lg overflow-hidden">
-                  <VideoKit
-                    path={originalPost?.video}
-                    className={originalPost?.isSensitive ? "blur-3xl" : ""}
-                  />
-                </div>
-              )}
-              {type === "status" && (
-                <span className="text-textGray">8:41 PM · Dec 5, 2026</span>
-              )}
-              <PostInteractions
-                username={originalPost?.user?.username}
-                postId={originalPost?.id}
-                count={originalPost?._count}
-                isLiked={!!originalPost?.likes?.length}
-                isRePosted={!!originalPost?.rePosts?.length}
-                isSaved={!!originalPost?.saves?.length}
-              />
-            </div>
+            <p className={`mb-3${type === "status" && "text-lg"}`}>
+              {post?.desc}
+            </p>
           </Link>
+          <div className="">
+            {originalPost?.img && (
+              <div className="overflow-hidden">
+                <ImageKit
+                  path={originalPost?.img}
+                  alt="Image"
+                  h={600}
+                  w={600}
+                  className={originalPost?.isSensitive ? "blur-3xl" : ""}
+                />
+              </div>
+            )}
+            {originalPost?.video && (
+              <div className="rounded-lg overflow-hidden">
+                <VideoKit
+                  path={originalPost?.video}
+                  className={originalPost?.isSensitive ? "blur-3xl" : ""}
+                />
+              </div>
+            )}
+            {type === "status" && (
+              <span className="text-textGray">8:41 PM · Dec 5, 2026</span>
+            )}
+            <PostInteractions
+              username={originalPost?.user?.username}
+              postId={originalPost?.id}
+              count={originalPost?._count}
+              isLiked={!!originalPost?.likes?.length}
+              isRePosted={!!originalPost?.rePosts?.length}
+              isSaved={!!originalPost?.saves?.length}
+            />
+          </div>
         </div>
       </div>
     </div>
