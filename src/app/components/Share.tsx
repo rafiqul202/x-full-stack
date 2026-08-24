@@ -19,6 +19,7 @@ const Share = () => {
   const [media, setMedia] = useState<File | null>(null);
   const [DescInput, setDescInput] = useState("");
   const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [setting, setSetting] = useState<{
     type: "original" | "wide" | "square";
     sensitive: boolean;
@@ -114,22 +115,32 @@ const Share = () => {
         abortSignal: abortController.signal,
       });
       // console.log("Upload response:", uploadResponse);
-      const response = await fetch("/api/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          desc: DescInput,
-          userId: user?.id,
-          isSensitive: setting.sensitive,
-          uploadResponse,
-        }),
-      });
-      const data = await response.json();
+      // database integration
+      try {
+        setIsLoading(true);
+        const response = await fetch("/api/posts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            desc: DescInput,
+            userId: user?.id,
+            isSensitive: setting.sensitive,
+            uploadResponse,
+          }),
+        });
+        const data = await response.json();
 
-      if (data) {
-        router.refresh();
+        if (data) {
+          router.refresh();
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+        setMedia(null);
+        setDescInput("");
       }
       // alert("Post created successfully!");
     } catch (error) {
@@ -272,7 +283,7 @@ const Share = () => {
             className="bg-white text-black rounded-full font-bold py-1 px-4"
             onClick={handleUpload}
           >
-            Post
+            {isLoading ? "Posting" : "Post"}
           </button>
         </div>
       </div>

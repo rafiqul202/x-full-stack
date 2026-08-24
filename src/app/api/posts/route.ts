@@ -70,7 +70,7 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     // Process your data here (e.g., save to a database)
-    console.log("Received data:", body);
+    // console.log("Received data:", body);
 
     try {
       const upload = body.uploadResponse ?? body;
