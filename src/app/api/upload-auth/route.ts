@@ -18,3 +18,4 @@ export async function GET() {
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
   });
 }
+

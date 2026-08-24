@@ -11,10 +11,13 @@ import {
 import Image from "next/image";
 import ImageEditor from "./ImageEditor";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const Share = () => {
+  const router = useRouter();
   const { user, isLoaded, isSignedIn } = useUser();
   const [media, setMedia] = useState<File | null>(null);
+  const [DescInput, setDescInput] = useState("");
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [setting, setSetting] = useState<{
     type: "original" | "wide" | "square";
@@ -25,7 +28,7 @@ const Share = () => {
   });
   const [progress, setProgress] = useState(0);
 
-  console.log(media);
+  // console.log(media);
 
   const abortController = new AbortController();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -110,7 +113,25 @@ const Share = () => {
         // Abort signal to allow cancellation of the upload if needed.
         abortSignal: abortController.signal,
       });
-      console.log("Upload response:", uploadResponse);
+      // console.log("Upload response:", uploadResponse);
+      const response = await fetch("/api/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          desc: DescInput,
+          userId: user?.id,
+          isSensitive: setting.sensitive,
+          uploadResponse,
+        }),
+      });
+      const data = await response.json();
+
+      if (data) {
+        router.refresh();
+      }
+      // alert("Post created successfully!");
     } catch (error) {
       // Handle specific error types provided by the ImageKit SDK.
       if (error instanceof ImageKitAbortError) {
@@ -144,12 +165,14 @@ const Share = () => {
         <input
           type="text"
           name="desc"
+          required
           placeholder="What's is happening?!"
           className="bg-transparent outline-none placeholder:text-textGray text-xl"
+          onChange={(e) => setDescInput(e.target.value)}
         />
         {/* preview image */}
         {media?.type.includes("image") && previewUrl && (
-          <div className="relative rounded-xl overflow-hidden">
+          <div className="relative rounded-xl overflow-hidden mt-4">
             <Image
               src={previewUrl}
               alt="preview Image"

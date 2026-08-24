@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "./prisma";
-import z, { success } from "zod";
+import z from "zod";
 import { revalidatePath } from "next/cache";
 
 export const likePost = async (postId: number) => {
@@ -111,3 +111,7 @@ export const addComment = async (
     return { success: false, error: true };
   }
 };
+
+
+
+

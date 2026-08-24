@@ -1,6 +1,7 @@
 import { prisma } from "@/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -62,4 +63,46 @@ export async function GET(request: NextRequest) {
   // await new Promise((resolve) => setTimeout(resolve, 3000));
 
   return Response.json({ posts, hasMore });
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+
+    // Process your data here (e.g., save to a database)
+    console.log("Received data:", body);
+
+    try {
+      const upload = body.uploadResponse ?? body;
+      let img: string | undefined;
+      let imgHeight: number | undefined;
+      let video: string | undefined;
+      if (upload.fileType === "image") {
+        img = upload.filePath ?? upload.url;
+        imgHeight = upload.height;
+      } else if (upload.fileType === "video") {
+        video = upload.filePath ?? upload.url;
+      }
+      await prisma.post.create({
+        data: {
+          desc: body.desc,
+          userId: String(body.userId),
+          isSensitive: body.isSensitive,
+          img,
+          imgHeight,
+          video,
+        },
+      });
+      revalidatePath(`/`);
+    } catch (error) {
+      console.log(error);
+    }
+
+    return NextResponse.json(
+      { message: "Success", data: body },
+      { status: 201 },
+    );
+  } catch (error) {
+    return NextResponse.json({ error: "Invalid data" }, { status: 400 });
+  }
 }

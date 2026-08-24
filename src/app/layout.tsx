@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import QueryProvider from "@/providers/QueryProvider";
+import { ImageKitProvider } from "@imagekit/next";
 
 export default function AppLayout({
   children,
@@ -11,7 +12,9 @@ export default function AppLayout({
     <ClerkProvider>
       <QueryProvider>
         <html lang="en">
-          <body>{children}</body>
+          <ImageKitProvider urlEndpoint={process.env.NEXT_PUBLIC_URL_ENDPOINT}>
+            <body>{children}</body>
+          </ImageKitProvider>
         </html>
       </QueryProvider>
     </ClerkProvider>
