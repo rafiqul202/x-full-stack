@@ -93,7 +93,7 @@ export async function POST(request: Request) {
           video,
         },
       });
-      revalidatePath(`/`);
+ 
     } catch (error) {
       console.log(error);
     }
@@ -103,6 +103,7 @@ export async function POST(request: Request) {
       { status: 201 },
     );
   } catch (error) {
+    console.log(error)
     return NextResponse.json({ error: "Invalid data" }, { status: 400 });
   }
 }

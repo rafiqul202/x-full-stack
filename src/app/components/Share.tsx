@@ -83,7 +83,7 @@ const Share = () => {
 
     // Call the ImageKit SDK upload function with the required parameters and callbacks.
 
-    const transformation = `w-600, ${
+    const transformation = `w-600,${
       setting.type === "square"
         ? "ar-1-1"
         : setting.type === "wide"
@@ -134,13 +134,13 @@ const Share = () => {
 
         if (data) {
           router.refresh();
+          setDescInput("");
         }
       } catch (error) {
         console.log(error);
       } finally {
         setIsLoading(false);
         setMedia(null);
-        setDescInput("");
       }
       // alert("Post created successfully!");
     } catch (error) {
@@ -280,7 +280,8 @@ const Share = () => {
             />
           </div>
           <button
-            className="bg-white text-black rounded-full font-bold py-1 px-4"
+            disabled={isLoading}
+            className="bg-white text-black rounded-full font-bold py-1 px-4 disabled:cursor-not-allowed"
             onClick={handleUpload}
           >
             {isLoading ? "Posting" : "Post"}

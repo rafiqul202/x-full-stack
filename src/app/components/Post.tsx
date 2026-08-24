@@ -129,7 +129,7 @@ const Post = ({
                   alt="Image"
                   h={600}
                   w={600}
-                  className={originalPost?.isSensitive ? "blur-3xl" : ""}
+                  className={originalPost?.isSensitive ? "blur-md" : ""}
                 />
               </div>
             )}
