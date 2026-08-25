@@ -4,6 +4,7 @@ import ImageKit from "./ImageKit";
 import { currentUser } from "@clerk/nextjs/server";
 import SignOut from "./SignOut";
 import Notifications from "./Notifications";
+import Socket from "./Socket";
 
 const menuLists = [
   {
@@ -117,6 +118,7 @@ const LeftBar = async () => {
           Post
         </Link>
       </div>
+      <Socket />
       {/* User */}
       <div className="flex items-center justify-between gap-x-6 ">
         <div className="flex justify-start gap-2">

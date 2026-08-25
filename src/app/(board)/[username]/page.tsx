@@ -2,11 +2,10 @@ import Feed from "@/app/components/Feed";
 import FollowButton from "@/app/components/FollowButton";
 import ImageKit from "@/app/components/ImageKit";
 import { prisma } from "@/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
-
 
 const UserPage = async ({
   params,
@@ -14,6 +13,7 @@ const UserPage = async ({
   params: Promise<{ username: string }>;
 }) => {
   const { userId } = await auth();
+  const ClerkUser = await currentUser();
   const user = await prisma.user.findUnique({
     where: { username: (await params).username },
     include: {
@@ -21,7 +21,6 @@ const UserPage = async ({
       followings: userId ? { where: { followerId: userId } } : undefined,
     },
   });
-
 
   if (!user) return notFound();
   return (
@@ -48,12 +47,7 @@ const UserPage = async ({
           </div>
           {/* avatar */}
           <div className="w-1/6 aspect-square rounded-full overflow-hidden border-4 border-gray-400 bg-gray-300 absolute left-4 -translate-y-1/2 cursor-pointer">
-            <ImageKit
-              path={user?.img || "/general/general/avatar.png"}
-              alt="cover"
-              w={100}
-              h={100}
-            />
+            <ImageKit path={ClerkUser?.imageUrl} alt="cover" w={100} h={100} />
           </div>
         </div>
         <div className="flex w-full items-center justify-end gap-2 p-3">
@@ -66,7 +60,12 @@ const UserPage = async ({
           <div className="w-9 h-9 flex items-center justify-center rounded-full border-[1px] border-gray-500 cursor-pointer">
             <ImageKit path="icons/icons/message.svg" alt="more" w={20} h={20} />
           </div>
-          {user?.id && <FollowButton userId={user?.id} isFollowed={!!user?.followings?.length } />}
+          {user?.id && (
+            <FollowButton
+              userId={user?.id}
+              isFollowed={!!user?.followings?.length}
+            />
+          )}
         </div>
         {/* USER DETAILS */}
         <div className="p-4 flex flex-col gap-2">
@@ -85,11 +84,16 @@ const UserPage = async ({
                 w={20}
                 h={20}
               />
-              { user?.location && <span>{user?.location}</span>}
+              {user?.location && <span>{user?.location}</span>}
             </div>
             <div className="flex items-center gap-2">
               <ImageKit path="icons/icons/date.svg" alt="date" w={20} h={20} />
-              <span>{new Date(user?.createdAt.toString()).toLocaleDateString("en-Us",{month:"long",year:"numeric"})}</span>
+              <span>
+                {new Date(user?.createdAt.toString()).toLocaleDateString(
+                  "en-Us",
+                  { month: "long", year: "numeric" },
+                )}
+              </span>
             </div>
           </div>
           {/* FOLLOWINGS & FOLLOWERS */}

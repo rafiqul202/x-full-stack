@@ -28,13 +28,13 @@ const Notifications = () => {
   };
 
   const handleClick = (notification: NotificationType) => {
-    // const filteredList = notifications.filter((n) => n.id !== notification.id);
-    // setNotifications(filteredList);
+    const filteredList = notifications.filter((n) => n.id !== notification.id);
+    setNotifications(filteredList);
     setOpen(false);
     router.push(notification.link);
   };
 
-  console.log("notification data details",notifications)
+  console.log("notification data details", notifications);
   return (
     <div className="relative">
       <div className="p-2 -mt-0.5 mb-2 rounded-full hover:bg-[#242424] flex items-center gap-4 text-start cursor-pointer">
