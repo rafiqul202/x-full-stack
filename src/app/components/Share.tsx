@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 
 const Share = () => {
   const router = useRouter();
-  const { user, isLoaded, isSignedIn } = useUser();
+  const { user } = useUser();
   const [media, setMedia] = useState<File | null>(null);
   const [DescInput, setDescInput] = useState("");
   const [isEditorOpen, setIsEditorOpen] = useState(false);
@@ -32,7 +32,8 @@ const Share = () => {
   // console.log(media);
 
   const abortController = new AbortController();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  console.log("fileinputRef value", fileInputRef);
 
   const previewUrl = media ? URL.createObjectURL(media) : null;
 
@@ -62,7 +63,8 @@ const Share = () => {
 
   // handle the the file upload process.
 
-  const handleUpload = async () => {
+  const handleUpload = async (e) => {
+    e.preventDefault();
     // access the file input element using the ref.
 
     const fileInput = fileInputRef.current;
@@ -114,7 +116,7 @@ const Share = () => {
         // Abort signal to allow cancellation of the upload if needed.
         abortSignal: abortController.signal,
       });
-      // console.log("Upload response:", uploadResponse);
+      console.log("Upload response:", uploadResponse);
       // database integration
       try {
         setIsLoading(true);
@@ -161,7 +163,7 @@ const Share = () => {
   };
 
   return (
-    <div className="p-4 flex gap-4">
+    <form className="p-4 flex gap-4" onSubmit={handleUpload}>
       {/* avatar */}
       <div className="rounded-full w-10 h-10 overflow-hidden">
         <ImageKit
@@ -227,6 +229,7 @@ const Share = () => {
           <div className="flex gap-5 flex-wrap">
             <input
               type="file"
+              name="file"
               ref={fileInputRef}
               className="hidden"
               id="file"
@@ -281,14 +284,15 @@ const Share = () => {
           </div>
           <button
             disabled={isLoading}
+            type="submit"
             className="bg-white text-black rounded-full font-bold py-1 px-4 disabled:cursor-not-allowed"
-            onClick={handleUpload}
+            // onClick={handleUpload}
           >
             {isLoading ? "Posting" : "Post"}
           </button>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

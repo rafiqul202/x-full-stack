@@ -1,8 +1,9 @@
 import Link from "next/link";
 import React from "react";
 import ImageKit from "./ImageKit";
-import {  currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import SignOut from "./SignOut";
+import Notifications from "./Notifications";
 
 const menuLists = [
   {
@@ -17,12 +18,12 @@ const menuLists = [
     link: "/",
     icon: "explore.svg",
   },
-  {
-    id: 3,
-    name: "Notification",
-    link: "/",
-    icon: "notification.svg",
-  },
+  // {
+  //   id: 3,
+  //   name: "Notification",
+  //   link: "/",
+  //   icon: "notification.svg",
+  // },
   {
     id: 4,
     name: "Messages",
@@ -67,8 +68,8 @@ const menuLists = [
   },
 ];
 const LeftBar = async () => {
-  const user = await currentUser()
-  
+  const user = await currentUser();
+
   return (
     <div className="h-screen sticky top-0 flex flex-col justify-between pt-2 pb-8">
       {/* logo menu button */}
@@ -79,20 +80,22 @@ const LeftBar = async () => {
         </Link>
         {/* menu lists */}
         <div className="flex flex-col gap-4 mt-5 w-full">
-          {menuLists.map(({ icon, id, link, name }) => (
-            <Link
-              href={link}
-              key={id}
-              className="p-2 rounded-full hover:bg-[#242424] flex items-center gap-4 text-start"
-            >
-              <ImageKit
-                path={`/icons/icons/${icon}`}
-                alt={name}
-                w={24}
-                h={24}
-              />
-              <span className="hidden xxl:inline">{name}</span>
-            </Link>
+          {menuLists.map(({ icon, id, link, name }, i) => (
+            <div key={id || i}>
+              {i === 2 && user && <Notifications />}
+              <Link
+                href={link}
+                className="p-2 rounded-full hover:bg-[#242424] flex items-center gap-4 text-start"
+              >
+                <ImageKit
+                  path={`/icons/icons/${icon}`}
+                  alt={name}
+                  w={24}
+                  h={24}
+                />
+                <span className="hidden xxl:inline">{name}</span>
+              </Link>
+            </div>
           ))}
         </div>
         {/* button */}
@@ -137,8 +140,9 @@ const LeftBar = async () => {
             </span>
           </div>
         </div>
-       <SignOut/>
+        <SignOut />
       </div>
+      {/* <Socket /> */}
     </div>
   );
 };
